@@ -1,0 +1,56 @@
+# ── Secrets & environment ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.json
+!package.json
+!tsconfig*.json
+!bun.lock
+
+# ── GCP credentials ───────────────────────────────────────────────────────────
+*service-account*.json
+*sa-key*.json
+*credentials*.json
+*.p12
+*.pem
+
+# ── Go (devops-intools-api) ───────────────────────────────────────────────────
+devops-intools-api/bin/
+devops-intools-api/dist/
+devops-intools-api/*.out
+devops-intools-api/*.test
+devops-intools-api/vendor/
+devops-intools-api/go.work
+devops-intools-api/go.work.sum
+
+# ── Node / Bun (devops-intools-app) ──────────────────────────────────────────
+devops-intools-app/node_modules/
+devops-intools-app/dist/
+devops-intools-app/*.tsbuildinfo
+devops-intools-app/.cache/
+devops-intools-app/coverage/
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+.dockerignore.local
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*.suo
+*.user
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Claude Code ───────────────────────────────────────────────────────────────
+.claude
