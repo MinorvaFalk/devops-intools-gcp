@@ -53,7 +53,8 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       LOG_FORMAT: ${LOG_FORMAT:-json}
-      EXTERNAL_API_URL: ${EXTERNAL_API_URL:-}
+      PROJECT_REF_URL: ${PROJECT_REF_URL:-}
+      PROJECT_REF_SKIP_TLS_VERIFY: ${PROJECT_REF_SKIP_TLS_VERIFY:-false}
     volumes:
       - ${GCP_CREDENTIALS_FILE:?GCP_CREDENTIALS_FILE must be set}:/run/secrets/gcp-sa.json:ro
     depends_on:

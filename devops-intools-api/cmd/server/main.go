@@ -54,7 +54,7 @@ func main() {
 
 	auditRepo := repository.NewAuditLogRepository(db)
 	appRefSvc := services.NewAppRefService(repository.NewAppRefRepository(db), auditRepo)
-	refProjectSvc := services.NewRefProjectService(cfg.ExternalAPI.BaseURL, log)
+	refProjectSvc := services.NewRefProjectService(cfg.ProjectRef.URL, cfg.ProjectRef.SkipTLSVerify, log)
 
 	app := buildApp(cfg, svcRegistry, appRefSvc, refProjectSvc, log)
 

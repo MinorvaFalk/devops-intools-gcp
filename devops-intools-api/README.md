@@ -54,7 +54,7 @@ DATABASE_URL=postgres://devtools:devtools@localhost:5432/devtools?sslmode=disabl
 API_KEY=your-secret-key
 
 # Optional: proxy to an external project registry
-EXTERNAL_API_URL=https://your-internal-registry/api
+PROJECT_REF_URL=https://your-internal-registry/api/projects/?format=json
 ```
 
 ### 2. Start a local database
@@ -204,4 +204,5 @@ tests/          → integration and unit tests
 | `LOG_LEVEL` | `info` | `debug` \| `info` \| `warn` \| `error` |
 | `LOG_FORMAT` | `console` | `console` (coloured) \| `json` |
 | `DATABASE_URL` | — | PostgreSQL DSN |
-| `EXTERNAL_API_URL` | — | Base URL for the external project registry |
+| `PROJECT_REF_URL` | — | Full URL of the project registry API endpoint (path + query params included) |
+| `PROJECT_REF_SKIP_TLS_VERIFY` | `false` | Skip TLS verification for the project ref API (self-signed certs) |

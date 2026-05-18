@@ -2,10 +2,10 @@ package services
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -13,23 +13,26 @@ import (
 	"devops-intools-api/internal/models"
 )
 
-const projectsSubpath = "projects/?format=json&lbu=38&platform=gcp&submit=Submit"
-
-// RefProjectService fetches project entries from the PruCore projects API.
-// The API is only reachable on the internal network; errors are logged and an
-// empty list is returned so the rest of the app continues working.
+// RefProjectService fetches project entries from an external project registry API.
+// If the API is unreachable, errors are logged and an empty list is returned so
+// the rest of the app continues working.
 type RefProjectService struct {
-	projectsURL string
-	client      *http.Client
-	log         *zap.Logger
+	url    string
+	client *http.Client
+	log    *zap.Logger
 }
 
-func NewRefProjectService(baseURL string, log *zap.Logger) *RefProjectService {
-	base := strings.TrimRight(baseURL, "/") + "/"
+func NewRefProjectService(url string, skipTLSVerify bool, log *zap.Logger) *RefProjectService {
+	transport := http.DefaultTransport
+	if skipTLSVerify {
+		transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, //nolint:gosec
+		}
+	}
 	return &RefProjectService{
-		projectsURL: base + projectsSubpath,
-		client:      &http.Client{Timeout: 15 * time.Second},
-		log:         log,
+		url:    url,
+		client: &http.Client{Timeout: 15 * time.Second, Transport: transport},
+		log:    log,
 	}
 }
 
@@ -59,12 +62,12 @@ type coreAPIProject struct {
 // and the error is logged as a warning so the rest of the app keeps working.
 func (s *RefProjectService) List(ctx context.Context) ([]*models.RefProject, error) {
 	var result []*models.RefProject
-	url := s.projectsURL
+	url := s.url
 
 	for url != "" {
 		page, err := s.fetchPage(ctx, url)
 		if err != nil {
-			s.log.Warn("PruCore projects API unavailable, returning empty list", zap.Error(err))
+			s.log.Error("PruCore projects API unavailable, returning empty list", zap.Error(err))
 			return []*models.RefProject{}, nil
 		}
 		for i := range page.Results {

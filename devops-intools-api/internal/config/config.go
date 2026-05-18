@@ -16,11 +16,12 @@ type Config struct {
 	Database    DatabaseConfig
 	Auth        AuthConfig
 	Log         LogConfig
-	ExternalAPI ExternalAPIConfig
+	ProjectRef ProjectRefConfig
 }
 
-type ExternalAPIConfig struct {
-	BaseURL string // External API Url for fetching project ref
+type ProjectRefConfig struct {
+	URL           string
+	SkipTLSVerify bool // set true when the project ref API uses a self-signed certificate
 }
 
 type ServerConfig struct {
@@ -95,8 +96,9 @@ func Load() (*Config, error) {
 			Level:  v.GetString("LOG_LEVEL"),
 			Format: v.GetString("LOG_FORMAT"),
 		},
-		ExternalAPI: ExternalAPIConfig{
-			BaseURL: v.GetString("EXTERNAL_API_URL"),
+		ProjectRef: ProjectRefConfig{
+			URL:           v.GetString("PROJECT_REF_URL"),
+			SkipTLSVerify: v.GetBool("PROJECT_REF_SKIP_TLS_VERIFY"),
 		},
 	}
 

@@ -8,7 +8,6 @@ import { useToast } from "../components/Toast";
 import { useQuery } from "../hooks/useQuery";
 import type { RefProject } from "../types/api";
 
-
 const CRITICALITY_CLASS: Record<string, string> = {
   Critical: "err",
   High: "warn",
@@ -72,9 +71,7 @@ export function ProjectRefPage() {
       <div className="page-head">
         <div>
           <h1 className="page-title">Project Reference</h1>
-          <p className="page-sub">
-            Project registry · {list.length} projects
-          </p>
+          <p className="page-sub">Project registry · {list.length} projects</p>
         </div>
         <button
           className="btn"
@@ -89,12 +86,33 @@ export function ProjectRefPage() {
       </div>
 
       <div className="stat-row">
-        <StatCard label="Total"    value={list.length} />
-        <StatCard label="Critical" value={list.filter((p) => p.criticality === "Critical").length} tone="err"  />
-        <StatCard label="High"     value={list.filter((p) => p.criticality === "High").length}     tone="warn" />
-        <StatCard label="Medium"   value={list.filter((p) => p.criticality === "Medium").length}   tone="info" />
-        <StatCard label="Low"      value={list.filter((p) => p.criticality === "Low").length}      tone="ok"   />
+        <StatCard label="Total" value={list.length} />
+        <StatCard
+          label="High"
+          value={list.filter((p) => p.criticality === "high").length}
+          tone="warn"
+        />
+        <StatCard
+          label="Medium"
+          value={list.filter((p) => p.criticality === "medium").length}
+          tone="info"
+        />
+        <StatCard
+          label="Low"
+          value={list.filter((p) => p.criticality === "low").length}
+          tone="ok"
+        />
       </div>
+
+      {!loading && list.length === 0 && (
+        <div className="notice warn">
+          <Icon name="warn" size={14} className="ic" />
+          <div>
+            No projects returned. The external project registry may be
+            unreachable
+          </div>
+        </div>
+      )}
 
       <div className="filterbar">
         <div className="search">
@@ -152,8 +170,20 @@ export function ProjectRefPage() {
               </div>
               <div className="sub">
                 <span className="tag mono accent">{selected.code}</span>
-                {selected.criticality && <><span className="muted">·</span><CriticalityBadge value={selected.criticality} /></>}
-                {selected.business_function && <><span className="muted">·</span><span className="mono text-fg-2">{selected.business_function}</span></>}
+                {selected.criticality && (
+                  <>
+                    <span className="muted">·</span>
+                    <CriticalityBadge value={selected.criticality} />
+                  </>
+                )}
+                {selected.business_function && (
+                  <>
+                    <span className="muted">·</span>
+                    <span className="mono text-fg-2">
+                      {selected.business_function}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
