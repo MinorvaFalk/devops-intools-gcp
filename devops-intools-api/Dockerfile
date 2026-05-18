@@ -1,5 +1,8 @@
 # ── Build stage ──────────────────────────────────────────────────────────────
-FROM golang:1.26-alpine AS builder
+
+ARG REGISTRY=docker.io
+
+FROM ${REGISTRY}/golang:1.26-alpine AS builder
 
 WORKDIR /app
 

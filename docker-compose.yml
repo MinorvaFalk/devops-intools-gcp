@@ -28,6 +28,8 @@ services:
     build:
       context: ./devops-intools-api
       target: migrate
+      args:
+        REGISTRY: ${REGISTRY:-docker.io}
     command: ["up"]
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-devtools}:${POSTGRES_PASSWORD:-devtools}@db:5432/${POSTGRES_DB:-devtools}?sslmode=disable
@@ -42,6 +44,8 @@ services:
     build:
       context: ./devops-intools-api
       target: server
+      args:
+        REGISTRY: ${REGISTRY:-docker.io}
     restart: unless-stopped
     environment:
       PORT: 8080
@@ -74,6 +78,7 @@ services:
         VITE_CACHE_TTL_MS: ${VITE_CACHE_TTL_MS:-300000}
         VITE_API_KEY: ${VITE_API_KEY:-}
         VITE_FIREWALL_PROJECTS: ${VITE_FIREWALL_PROJECTS:-}
+        REGISTRY: ${REGISTRY:-docker.io}
     restart: unless-stopped
     environment:
       API_BACKEND_URL: http://api:8080

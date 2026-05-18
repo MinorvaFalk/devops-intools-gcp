@@ -1,5 +1,8 @@
 # ─── Stage 1: build ──────────────────────────────────────────────────────────
-FROM oven/bun:1.3.14-alpine AS builder
+
+ARG REGISTRY=docker.io
+
+FROM ${REGISTRY}/oven/bun:1.3.14-alpine AS builder
 
 WORKDIR /app
 
@@ -21,7 +24,7 @@ ENV VITE_FIREWALL_PROJECTS=$VITE_FIREWALL_PROJECTS
 RUN bun run build
 
 # ─── Stage 2: serve ───────────────────────────────────────────────────────────
-FROM nginx:1.31-alpine AS runner
+FROM ${REGISTRY}/nginx:1.31-alpine AS runner
 
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 COPY --from=builder /app/dist /usr/share/nginx/html
